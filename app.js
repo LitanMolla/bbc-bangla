@@ -37,11 +37,23 @@ const isActive = (id) => {
 }
 // load news by catagory id
 const loadNews = (category) => {
+    isLoading(true);
     const url = `https://news-api-fs.vercel.app/api/categories/${category}`
     fetch(url)
         .then(response => response.json())
         .then(data => showNews(data.articles))
         .catch(error => alert(error, 'Server Error'))
+}
+// Loading function
+const isLoading = (status)=>{
+    if (status) {
+        getElement('loading').classList.remove('hidden');
+        getElement('news_card_container').classList.add('hidden');
+    } else {
+        getElement('loading').classList.add('hidden');
+        getElement('news_card_container').classList.remove('hidden');
+    }
+    console.log(status)
 }
 // show news 
 const showNews = (newses) => {
@@ -53,6 +65,7 @@ const showNews = (newses) => {
                         <h1 class="text-2xl font-medium">এই ক্যাটেগরিতে এখনো কোনো নিউজ পাবলিশ হয়নি</h1>
                      </div>
         `;
+        isLoading(false);
         return;
     }
     newses.forEach(item => {
@@ -78,6 +91,7 @@ const showNews = (newses) => {
                     </div>
         `;
         newsContainer.appendChild(element);
+        isLoading(false);
     })
 }
 loadNews('main')
