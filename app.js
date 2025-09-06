@@ -42,7 +42,10 @@ const loadNews = (category) => {
     fetch(url)
         .then(response => response.json())
         .then(data => showNews(data.articles))
-        .catch(error => alert(error, 'Server Error'))
+        .catch(error => {
+            alert(error, )
+            return;
+        })
 }
 // Loading function
 const isLoading = (status)=>{
@@ -103,7 +106,8 @@ const addToBookmarks = async (id) => {
     const chekdata = bookmarks.find(item => item.id === data.article.id);
     if (!response.ok) {
         alert(`Error ${response.status}`)
-        console.log(response.status)
+        console.log(response.status);
+        return;
     }
     if (chekdata) {
         return;
@@ -136,7 +140,6 @@ const showBookmarks = (arr) => {
         bookmarkContainer.appendChild(element)
     })
 }
-
 // load news 
 const loadDetailsNews = (id) => {
     const url = `https://news-api-fs.vercel.app/api/news/${id}`;
@@ -160,7 +163,6 @@ const showDetailNewas = (news) => {
     getElement('my_modal_1').showModal();
     console.log(news)
 }
-
 // Delete bookmark 
 const deleteBookmark = (id) => {
     bookmarks.map((item, index) => {
