@@ -47,6 +47,14 @@ const loadNews = (category) => {
 const showNews = (newses) => {
     const newsContainer = getElement('news_card_container');
     newsContainer.innerHTML = '';
+    if (newses.length===0) {
+        newsContainer.innerHTML=`
+                    <div id="" class="col-span-full text-center py-20">
+                        <h1 class="text-2xl font-medium">এই ক্যাটেগরিতে এখনো কোনো নিউজ পাবলিশ হয়নি</h1>
+                     </div>
+        `;
+        return;
+    }
     newses.forEach(item => {
         const element = document.createElement('div');
         const imgUrl = item.image.srcset[0].url;
@@ -79,6 +87,10 @@ const addToBookmarks = async (id) => {
     const response = await fetch(url);
     const data = await response.json();
     const chekdata = bookmarks.find(item => item.id === data.article.id);
+    if (!response.ok) {
+        alert(`Error ${response.status}`)
+        console.log(response.status)
+    }
     if (chekdata) {
         return;
     } else {
@@ -113,11 +125,11 @@ const showBookmarks = (arr) => {
 
 // load news 
 const loadDetailsNews = (id) => {
-    // console.log(id)
     const url = `https://news-api-fs.vercel.app/api/news/${id}`;
     fetch(url)
         .then(response => response.json())
         .then(data => showDetailNewas(data))
+        .catch(error=>alert(error))
 }
 // show Details News
 const showDetailNewas = (news) => {
@@ -127,11 +139,12 @@ const showDetailNewas = (news) => {
     detailsContainer.innerHTML = '';
     const element = document.createElement('div');
     element.innerHTML = `
-        <img class="rounded-md my-4" src="${image}" alt="">
-        <p>${description}</p>
+        <img class="rounded-md my-4" src="${image?image:'Image Not Found'}" alt="">
+        <p>${description?description:'Not Found'}</p>
     `;
     detailsContainer.appendChild(element);
     getElement('my_modal_1').showModal();
+    console.log(news)
 }
 
 // Delete bookmark 
